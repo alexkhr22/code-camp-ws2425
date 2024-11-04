@@ -1,4 +1,8 @@
-package com.uebung_basics.network
+package com.uebung_basics.data.models
 
-class DeckResponse {
-}
+data class DeckResponse(
+    val success: Boolean,
+    val deck_id: String,
+    val shuffled: Boolean,
+    val remaining: Int
+)

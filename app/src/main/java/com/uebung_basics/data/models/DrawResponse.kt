@@ -1,4 +1,8 @@
-package com.uebung_basics.network
+package com.uebung_basics.data.models
 
-class DrawResponse {
-}
+data class DrawResponse(
+    val success: Boolean,
+    val deck_id: String,
+    val cards: List<Card>,
+    val remaining: Int
+)

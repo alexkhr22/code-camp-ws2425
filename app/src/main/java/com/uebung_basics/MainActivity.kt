@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.uebung_basics.ui.view.*
 import androidx.navigation.compose.composable
 import com.uebung_basics.ui.navigation.BottomNavigationBar
+import com.uebung_basics.ui.viewmodel.DeckViewModel
 
 
 /*
@@ -26,6 +28,8 @@ import com.uebung_basics.ui.navigation.BottomNavigationBar
  */
 
 class MainActivity : ComponentActivity() {
+    private val viewModel: DeckViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
