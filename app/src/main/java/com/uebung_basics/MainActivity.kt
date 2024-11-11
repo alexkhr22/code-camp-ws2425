@@ -1,5 +1,6 @@
 package com.uebung_basics
 
+import AppWorker
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,8 +18,11 @@ import com.uebung_basics.ui.theme.Uebung_basicsTheme
 import androidx.navigation.compose.rememberNavController
 import com.uebung_basics.ui.view.*
 import androidx.navigation.compose.composable
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.uebung_basics.ui.navigation.BottomNavigationBar
 import com.uebung_basics.ui.viewmodel.DeckViewModel
+import java.util.concurrent.TimeUnit
 
 
 /*
@@ -38,7 +42,23 @@ class MainActivity : ComponentActivity() {
                 MainScreen()
             }
         }
+
+        startAppWorker()
     }
+
+    private fun startAppWorker() {
+        // Definiere eine periodische Arbeitsanforderung, die alle 15 Minuten ausgeführt wird.
+        // WorkManager unterstützt ein Minimum von 15 Minuten bei PeriodicWorkRequest.
+        val workRequest = PeriodicWorkRequest.Builder(
+            AppWorker::class.java,
+            15,
+            TimeUnit.MINUTES
+        ).build()
+
+        // Plane den Worker
+        WorkManager.getInstance(applicationContext).enqueue(workRequest)
+    }
+
 }
 
 @Composable

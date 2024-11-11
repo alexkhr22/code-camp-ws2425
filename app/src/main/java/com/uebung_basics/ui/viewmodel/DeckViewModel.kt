@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 //Methoden für Serveranfragen und Abspeicher von Attributen
 class DeckViewModel: ViewModel() {
-    private var deckId: String? = null
+    var deckId: String? = null
     private val _drawnCards = MutableStateFlow<List<Card>>(emptyList())
     val drawnCards: StateFlow<List<Card>> get() = _drawnCards
 
