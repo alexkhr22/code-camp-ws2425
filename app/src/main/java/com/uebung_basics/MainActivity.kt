@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
         ).build()
     }
 
-    // Lazy-Initialisierung des CardViewModels mit der Datenbank
+    // Lazy-Initialisierung des CardViewModels mit der Datenban
 
 
     private val viewModel: DeckViewModel by viewModels()
