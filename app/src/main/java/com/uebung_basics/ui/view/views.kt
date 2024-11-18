@@ -18,12 +18,11 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewModelScope
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
-import com.uebung_basics.ui.viewmodel.CardViewModel
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun HomeView(deckViewModel: DeckViewModel = viewModel(), cardViewModel: CardViewModel = viewModel()) {
+fun HomeView(deckViewModel: DeckViewModel = viewModel()) {
     val drawnCards by deckViewModel.drawnCards.collectAsState()
     Column(
         modifier = Modifier
@@ -36,21 +35,22 @@ fun HomeView(deckViewModel: DeckViewModel = viewModel(), cardViewModel: CardView
         }
 
         Button(onClick = {
-            // Stelle sicher, dass ein Deck existiert und gezogen werden kann
             val deckId = deckViewModel.deckId
 
             if (deckId != null) {
-                // Zieht eine Karte vom Server
-                deckViewModel.drawCards(1)
+                deckViewModel.viewModelScope.launch {
+                    // Ziehe eine Karte und warte auf das Ergebnis
+                    deckViewModel.drawCards(1)
 
-                // Holt sich die erste gezogene Karte, falls vorhanden
-                val drawnCard = deckViewModel.drawnCards.value.firstOrNull()
-
-                drawnCard?.let { card ->
-                    // Speichern der gezogenen Karte in der Datenbank
-                    cardViewModel.saveDrawnCard(deckId, card)
-                    Log.d("CardDraw", "Gezogene Karte: ${card.value} of ${card.suit}")
-                } ?: Log.d("CardDraw", "Keine Karte gezogen. Überprüfe die Deck-ID oder versuche es später.")
+                    // Überprüfe, ob Karten gezogen wurden
+                    val drawnCard = deckViewModel.drawnCards.value.firstOrNull()
+                    if (drawnCard != null) {
+                        // Speichern der gezogenen Karte in der Datenbank
+                        Log.d("CardDraw", "Gezogene Karte: ${drawnCard.value} of ${drawnCard.suit}")
+                    } else {
+                        Log.d("CardDraw", "Keine Karte gezogen. Überprüfe die Deck-ID oder versuche es später.")
+                    }
+                }
             } else {
                 Log.d("CardDraw", "Deck wurde noch nicht erstellt.")
             }
@@ -59,21 +59,8 @@ fun HomeView(deckViewModel: DeckViewModel = viewModel(), cardViewModel: CardView
         }
 
         Button(onClick = {
-            // Startet eine Coroutine im ViewModel-Scope
-            deckViewModel.viewModelScope.launch {
-                cardViewModel.getLastThreeDrawnCards().collect { cards ->
-                    cards.forEach {
-                        Log.d("LastCard", "Letzte Karte: ${it.cardValue} of ${it.cardSuit}")
-                    }
-                }
-            }
-        }, modifier = Modifier.padding(top = 8.dp)) {
-            Text(text = "Get Last Card")
-        }
-
-        Button(onClick = {
             deckViewModel.resetDeck()  // Reset im DeckViewModel (setzt Deck ID zurück)
-            cardViewModel.resetDeck()  // Reset im CardViewModel (löscht alle Karten aus der DB)
+            // Reset im CardViewModel (löscht alle Karten aus der DB)
             Log.d("CardDraw", "Deck und Karten wurden zurückgesetzt.")
         }, modifier = Modifier.padding(top = 8.dp)) {
             Text(text = "Reset")

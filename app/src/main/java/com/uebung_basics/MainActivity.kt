@@ -18,8 +18,10 @@ import com.uebung_basics.ui.theme.Uebung_basicsTheme
 import androidx.navigation.compose.rememberNavController
 import com.uebung_basics.ui.view.*
 import androidx.navigation.compose.composable
+import androidx.room.Room
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import com.uebung_basics.data.database.DrawnCardDataBase
 import com.uebung_basics.ui.navigation.BottomNavigationBar
 import com.uebung_basics.ui.viewmodel.DeckViewModel
 import java.util.concurrent.TimeUnit
@@ -32,6 +34,17 @@ import java.util.concurrent.TimeUnit
  */
 
 class MainActivity : ComponentActivity() {
+   private val database by lazy {
+         Room.databaseBuilder(
+            applicationContext,
+            DrawnCardDataBase::class.java,
+            "drawn_card_database"
+        ).build()
+    }
+
+    // Lazy-Initialisierung des CardViewModels mit der Datenbank
+
+
     private val viewModel: DeckViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

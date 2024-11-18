@@ -9,5 +9,6 @@ data class DrawnCard(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "deck_id") val deckId: String,
     @ColumnInfo(name = "card_value") val cardValue: String,
-    @ColumnInfo(name = "card_suit") val cardSuit: String
+    @ColumnInfo(name = "card_suit") val cardSuit: String,
+    @ColumnInfo(name = "image_url") val imageUrl: String
 )
